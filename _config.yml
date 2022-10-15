@@ -40,6 +40,16 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: BelkebirHicham
 github_username:  bhic1973
 
+lsi: false
+safe : true 
+source: "/"
+incremental: false
+highlighter: rouge 
+gist:
+  noscript: false 
+Kramdown:
+  math_engine: mathjax 
+  syntax_highlighter: rouge 
 # Build settings
 <<<<<<< HEAD
 # theme: minima
