@@ -25,7 +25,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   genie des systemes embarques et informatique industrielle. Annee universitaire 2022-2023.
 domain: vision-artificielle.github.io
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://vision-artificielle.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://usmba-ensaf.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: BelkebirHicham
 github_username:  bhic1973
 
