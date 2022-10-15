@@ -31,7 +31,7 @@ github_username:  bhic1973
 
 lsi: false
 safe : true 
-source: "/"
+source: "."
 incremental: false
 highlighter: rouge 
 gist:
@@ -40,11 +40,12 @@ Kramdown:
   math_engine: mathjax 
   syntax_highlighter: rouge 
 # Build settings
-theme: minima
-# remote-theme: benbalter/retlab
+# theme: minima
+remote-theme: benbalter/retlab
 plugins:
   - jekyll-feed
-  # - jekyll-remote-theme
+  - jekyll-remote-theme
+  - jekyll-gist
 
 # Exclude from processing.
 # The following items will not be processed, by default.
