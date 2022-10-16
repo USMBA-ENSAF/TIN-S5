@@ -37,7 +37,7 @@ github_username:  bhic1973
 # theme: hamilton
 plugins:
   - jekyll-feed
-  - jekyll-theme-hamilton
+  - jekyll-remote-theme
 
 remote_theme: ngzhio/jekyll-theme-hamilton
 # remote-theme: 
