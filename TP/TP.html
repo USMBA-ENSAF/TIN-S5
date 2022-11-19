@@ -1,0 +1,85 @@
+<h1 id="partie-01">Partie 01</h1>
+<h2 id="objectives">Objectives</h2>
+<p>Nous désirons dans cet atelier développer un détecteur efficace de lignes de voie d’une route quelconque en utilisant <code>Python</code> comme langage de programmation et OpenCv comme bibliothèque qui mettra a notre disposions les différents fonctionnalités permettant la manipulation des images et enfin matplotlib comme bibliothèque graphique pour gérer les différents graphiques générés par nos programmes.</p>
+<p>Au cours de cet atelier nous allons explorer les aspects suivant du traitement d’image :</p>
+<ul>
+<li><p>Changement d’espace calorimétrique;</p></li>
+<li><p>Détection de contour;</p></li>
+<li><p>Sélection de région d’intérêt dans une image (ROI);</p></li>
+<li><p>Implémentation de la transformée de Hough pour la détection des lignes de la voie.</p></li>
+</ul>
+<hr />
+<h2 id="pré-requis-du-lab">Pré requis du LAB</h2>
+<p>Environnement Python fonctionnel dans lequel est installé les paquetages suivants :</p>
+<ul>
+<li><p>Numpy;</p></li>
+<li><p>Matplotlib;</p></li>
+<li><p>Scikit-learn;</p></li>
+<li><p>Scikit-image;</p></li>
+<li><p>OpenCV 3.6;</p></li>
+<li><p>Opencv-python;</p></li>
+<li><p>Pillow,</p></li>
+<li><p>Scipy.</p></li>
+<li><p>ffmpeg-python</p></li>
+<li><p>pprint</p></li>
+</ul>
+<h2 id="extraction-des-images-à-partir-dune-vidéo.">Extraction des images à partir d’une vidéo.</h2>
+<p>La première étape de ce Lab consiste a extraire les images qu’on va manipuler à partir d’une séquence vidéo au format mp4. Pour ce faire, nous allons utiliser le paquetage <code>ffmpeg</code> :</p>
+<ol type="1">
+<li><p>Utiliser la méthode <code>probe</code> de <code>ffmpeg</code> et créer un objet probe qui vous donne l’accès aux propriétés de la séquence vidéo.</p></li>
+<li><p>Filtrez le contenu de l’objet probe pour en sortir les propriétés du stream vidéo.</p></li>
+<li><p>Afficher la résolution de la vidéo et le nombre de frame quelle contient.</p></li>
+</ol>
+<blockquote>
+<p>NB: Pour l’impression a la sortie standard, on utilisera le paquetage <code>pprint</code>.</p>
+</blockquote>
+<ol start="4" type="1">
+<li><p>En utilisant les méthodes <code>input</code>, <code>filter</code>, <code>output</code> et ‘run’, charger les données de la séquence vidéo sous forme d’un tenseur numpy de dimension ([indice de la frame, nombre de ligne, nombre de colonnes, nombre de canaux de couleur]). Choisir un <span class="math inline"><em>f</em><em>p</em><em>s</em> = 5 : 1</span>.</p></li>
+<li><p>Créer une fonction:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>    <span class="kw">def</span> show_images(images:numpy.ndarray,cmap:<span class="bu">str</span>):</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>        <span class="co"># Utiliser une grille de deux colonnes et 5 ligne pour l&#39;affichage</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>        <span class="co"># des images chargees dans le tableau numpy genere precedement.</span></span></code></pre></div></li>
+<li><p>Afficher les 10 premières frames chargées dans votre tableau numpy.</p></li>
+<li><p>En utilisant maintenant le module Image du paquetage PIL (pillow) sauvegarder l’ensemble des frames au format <code>PNG</code> dans le répertoire test_image.</p></li>
+<li><p>Validez cette étape avant de passer a la suivante.</p></li>
+</ol>
+<hr />
+<h2 id="manipulation-de-lespace-calorimétrique-avec-opencv.">Manipulation de l’espace calorimétrique avec OpenCV.</h2>
+<p>En utilisant les méthodes <code>pprint</code> de pprint, <code>filter</code> et <code>map</code> de <code>python</code>, <code>Image.open</code> de <code>pillow</code> et <code>cvtColor</code> de <code>OpenCV</code> écrire un script python qui permet d’accomplir les taches ci-dessous tout en utilisant le paradigme fonctionnel:</p>
+<ol type="1">
+<li><p>Charger le chemin des images dans une liste.</p></li>
+<li><p>Charger a partir de cette liste les images dans une liste d’objet <code>pillow</code>;</p></li>
+<li><p>Convertir le contenu de cette liste dans un premier temps au format <code>Lab</code> et afficher les composantes de luminescence.</p></li>
+<li><p>Convertir ensuite la même liste dans l’espace HSV et afficher les composantes de luminescence.</p></li>
+<li><p>Convertir toujours la même liste au format YCbCr et afficher le résultat.</p></li>
+<li><p>Comparez et conclure.</p></li>
+</ol>
+<h2 id="utilisation-des-masques-de-couleurs.">Utilisation des masques de couleurs.</h2>
+<p>Notre intérêt principale au cours de ce Lab porte sur l’isolation des lignes de voie qui sont colores dans la plus part du temps soit en blanc ou en jaune. Partant de ce constat, nous allons élaborer un masque de couleur qui permet d’éliminer les composantes colorimétrique de nos images autres que le blanc et le jaune. Notez bien qu’on va prendre pour représenter le jaune dans l’espace sRGB le vecteur <code>[190,190,0]</code> comme ton avec saturation minimale et <code>[255, 25, 0]</code> comme ton avec saturation maximale. Nous allons utilisez les fonction <code>bitwise_or</code>, <code>bitwise_and</code> et <code>inRange</code> d’openCv pour mettre en oeuvre cette partie du Lab.</p>
+<ol type="1">
+<li><p>Commencez par définir la fonction <code>im2YW(im:PIL)-&gt;im:PIL</code></p></li>
+<li><p>Appliquer cette fonction sur la liste des images représentées dans l’espace sRGB puis en représentation YcbCr puis en Lab et enfin en HSV.</p></li>
+<li><p>Afficher les résultats et comparez les performances et conclure.</p></li>
+</ol>
+<hr />
+<h2 id="détection-des-contours">Détection des contours</h2>
+<p>Dans cette partie, nous allons appliquée la démarche développée dans le cours pour détecter les contours présents dans les images issues de l’étape précédente.</p>
+<ol type="1">
+<li><p>Choisir l’espace de représentation adéquat qui permet une détection de contour de qualité.</p></li>
+<li><p>Extraire la composante de luminance des images.</p></li>
+<li><p>Calcul des images du gradient en utilisant le filtre de Sobel dans la direction horizontale et verticale.</p></li>
+<li><p>Calcul de la norme du gradient en utilisant les normes suivantes:</p>
+<ul>
+<li>Norme euclidienne;</li>
+<li>Norme infinie;</li>
+<li>Norme Sup.</li>
+</ul></li>
+<li><p>Élaborez la fonction qui permet de supprimer les non-maximas locales de l’image de la norme du gradient et exécutez la pour les trois types de normes.</p></li>
+<li><p>Écrire la fonction qui permet de réaliser le seuillage par hystéries et appliquer la aux images générés lors de l’étape précédente.</p></li>
+<li><p>Comparez le résultat obtenu avec celui qu’on peut obtenir avec la méthode de détection de Canny implémenté dans openCV</p></li>
+<li><p>Procédez au fermeture des contours détectés par l’utilisation des opérateurs morphologiques.</p></li>
+</ol>
+<blockquote>
+<p>NB: Dans chaque étape vous devez afficher les résultats et générez vos analyses et conclusion.</p>
+</blockquote>
+<hr />
